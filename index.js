@@ -14,25 +14,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-
 app.use("/categories", categoryRouter);
-
-const user = new mongoose.Schema({
-    name: String,
-});
-
-const User = mongoose.model("User", user);
-
-app.get("/test-mongoose", (req, res) => {
-    User.create({
-        name: "Baldan",
-        email: "baldan@horl.mn",
-        age: 18,
-        createdAt: new Date(),
-    });
-
-    res.json({});
-});
 
 app.listen(port, () => {
     console.log("App is listering at port", port);

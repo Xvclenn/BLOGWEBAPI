@@ -4,21 +4,21 @@ const router = express.Router();
 const mongoose = require("mongoose");
 
 const categorySchema = new mongoose.Schema({
+    categoryName: String,
     _id: String,
-    text: String,
 });
 
-const Category = mongoose.model("Article", categorySchema);
+const Category = mongoose.model("Category", categorySchema);
 
-router.get("/", async (req, res) => {
-    const { q } = req.query;
-    const qregex = new RegExp(`${q}`, "i");
-    const list = await Category.find({ name: qregex }, "", {
-        sort: { name: 1 },
-    });
-    console.log(list);
-    res.json(list);
-});
+// router.get("/", async (req, res) => {
+//     const { q } = req.query;
+//     const qregex = new RegExp(`${q}`, "i");
+//     const list = await Category.find({ name: qregex }, "", {
+//         sort: { name: 1 },
+//     });
+//     console.log(list);
+//     res.json(list);
+// });
 
 router.get("/:id", async (req, res) => {
     const { id } = req.params;
@@ -28,39 +28,39 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-    const { text } = req.body;
-    // console.log(req.body);
+    const { categoryName } = req.body;
+    console.log(req.body);
 
-    const newCategory = new Category({
-        _id: uuid(),
-        text: text,
-    });
-    const result = await newCategory.save();
+    // const newCategory = new Category({
+    //     categoryName: categoryName,
+    //     _id: uuid(),
+    // });
+    // const result = await newCategory.save();
 
     // console.log({ result });
 
-    // await Category.create({
-    //     _id: uuid(),
-    //     name: name,
-    // });
-
-    res.json(result);
-});
-
-router.delete("/:id", (req, res) => {
-    const { id } = req.params;
-    Category.deleteOne({ _id: id }).then(() => {
-        res.json({ deletedId: id });
+    await Category.create({
+        name: categoryName,
+        _id: uuid(),
     });
+
+    // res.json(result);
 });
 
-router.put("/:id", (req, res) => {
-    const { id } = req.params;
-    const { name } = req.body;
-    Category.updateOne({ _id: id }, { name }).then(() => {
-        res.json({ updatedId: id });
-    });
-});
+// router.delete("/:id", (req, res) => {
+//     const { id } = req.params;
+//     Category.deleteOne({ _id: id }).then(() => {
+//         res.json({ deletedId: id });
+//     });
+// });
+
+// router.put("/:id", (req, res) => {
+//     const { id } = req.params;
+//     const { name } = req.body;
+//     Category.updateOne({ _id: id }, { name }).then(() => {
+//         res.json({ updatedId: id });
+//     });
+// });
 
 module.exports = {
     categoryRouter: router,
