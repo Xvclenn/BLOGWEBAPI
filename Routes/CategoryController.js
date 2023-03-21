@@ -4,8 +4,8 @@ const router = express.Router();
 const mongoose = require("mongoose");
 
 const categorySchema = new mongoose.Schema({
-    categoryName: String,
-    _id: String,
+    _id: { type: String, default: () => uuid() },
+    name: String,
 });
 
 const Category = mongoose.model("Category", categorySchema);
@@ -20,31 +20,47 @@ const Category = mongoose.model("Category", categorySchema);
 //     res.json(list);
 // });
 
-router.get("/:id", async (req, res) => {
-    const { id } = req.params;
-    // const one = await Category.findOne({ _id: id });
-    const one = await Category.findById(id);
-    res.json(one);
+// router.get("/:id", async (req, res) => {
+//     const { id } = req.params;
+//     // const one = await Category.findOne({ _id: id });
+//     const one = await Category.findById(id);
+//     res.json(one);
+// });
+
+router.get("/", async (req, res) => {
+    const list = await Category.find({});
+
+    res.json({ list });
 });
 
+// router.post("/", async (req, res) => {
+//     const { name } = req.body;
+//     console.log(req.body);
+
+//     // const newCategory = new Category({
+//     //     name: name,
+//     //     _id: uuid(),
+//     // });
+//     // const result = await newCategory.save();
+
+//     // console.log({ result });
+
+//     await Category.create({
+//         _id: uuid(),
+//         name: name,
+//     });
+
+//     // res.json(result);
+// });
+
 router.post("/", async (req, res) => {
-    const { categoryName } = req.body;
-    console.log(req.body);
-
-    // const newCategory = new Category({
-    //     categoryName: categoryName,
-    //     _id: uuid(),
-    // });
-    // const result = await newCategory.save();
-
-    // console.log({ result });
+    const { name } = req.body;
 
     await Category.create({
-        name: categoryName,
-        _id: uuid(),
+        name,
     });
 
-    // res.json(result);
+    res.sendStatus(201);
 });
 
 // router.delete("/:id", (req, res) => {
